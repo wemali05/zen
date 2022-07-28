@@ -116,17 +116,30 @@ export default {
     },
 
     methods: {
-        onFileChange: function (e) {
-            //console.log(e.target.files[0]);
-            this.filename = "Selected File: " + e.target.files[0].name;
+        onChange(e) {
             this.file = e.target.files[0];
         },
 
         editForm: function () {
-            this.loading = true
-            axios.put(route('resources.update', this.resource.id), this.form)
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            // form data
+            const formData = new FormData();
+            formData.append('file', this.file)
+            formData.append('pdf_title', this.form.pdf_title)
+            formData.append('snippet_title', this.form.snippet_title)
+            formData.append('snippet_content', this.form.snippet_content)
+            formData.append('link_title', this.form.link_title)
+            formData.append('link', this.form.link)
+            formData.append('open_tab', this.form.open_tab)
+
+            // this.loading = true
+            axios.put(route('resources.update', this.resource.id), formData, config)
                 .then(() => {
-                    this.loading = false
+                    // this.loading = false
                 })
                 .catch(error => {
                     console.log(error.response)
