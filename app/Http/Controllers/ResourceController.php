@@ -16,7 +16,7 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        $resources = Resource::all();
+        $resources = Resource::latest('created_at')->get();
 
         return Inertia::render('List', [
             'resources' => $resources
